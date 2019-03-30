@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// Part1 does Chronal Calibration.
+// Part1 sums the frequency changes.
 func Part1(fileName string) (int, error) {
 	freqs, err := loadFreqs(fileName)
 	if err != nil {
