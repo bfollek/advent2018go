@@ -9,40 +9,28 @@ import (
 
 // Part1 does Chronal Calibration.
 func Part1(fileName string) (int, error) {
-	numsAsStrings, err := loadData(fileName)
+	freqs, err := loadFreqs(fileName)
 	if err != nil {
 		return 0, err
 	}
 	sum := 0
-	for _, s := range numsAsStrings {
-		var i int
-		if i, err = strconv.Atoi(s); err != nil {
-			return 0, err
-		}
-		sum += i
+	for _, n := range freqs {
+		sum += n
 	}
 	return sum, nil
 }
 
 // Part2 finds the first repeated frequency.
 func Part2(fileName string) (int, error) {
-	sum := 0
-	seen := map[int]bool{sum: true}
-	numsAsStrings, err := loadData(fileName)
+	freqs, err := loadFreqs(fileName)
 	if err != nil {
 		return 0, err
 	}
-	nums := []int{}
-	for _, s := range numsAsStrings {
-		var i int
-		if i, err = strconv.Atoi(s); err != nil {
-			return 0, err
-		}
-		nums = append(nums, i)
-	}
+	sum := 0
+	seen := map[int]bool{sum: true}
 	// We may have to cycle through the frequencies more than once
 	for {
-		for _, n := range nums {
+		for _, n := range freqs {
 			sum += n
 			if seen[sum] {
 				return sum, nil
@@ -50,6 +38,22 @@ func Part2(fileName string) (int, error) {
 			seen[sum] = true
 		}
 	}
+}
+
+func loadFreqs(fileName string) ([]int, error) {
+	ss, err := loadData(fileName)
+	if err != nil {
+		return nil, err
+	}
+	freqs := []int{}
+	for _, s := range ss {
+		var i int
+		if i, err = strconv.Atoi(s); err != nil {
+			return nil, err
+		}
+		freqs = append(freqs, i)
+	}
+	return freqs, nil
 }
 
 func loadData(fileName string) ([]string, error) {
