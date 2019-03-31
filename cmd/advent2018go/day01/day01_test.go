@@ -6,7 +6,7 @@ import (
 
 func TestPart1(t *testing.T) {
 	expected := 592
-	result, err := Part1("../../data/day01.txt")
+	result, err := Part1("testdata/day01.txt")
 	if err != nil {
 		t.Errorf("Unexpected error - [%s]", err)
 	}
@@ -17,7 +17,7 @@ func TestPart1(t *testing.T) {
 
 func TestPart2(t *testing.T) {
 	expected := 241
-	result, err := Part2("../../data/day01.txt")
+	result, err := Part2("testdata/day01.txt")
 	if err != nil {
 		t.Errorf("Unexpected error - [%s]", err)
 	}

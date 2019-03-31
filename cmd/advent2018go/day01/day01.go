@@ -1,10 +1,9 @@
 package day01
 
 import (
-	"io/ioutil"
-	"path/filepath"
 	"strconv"
-	"strings"
+
+	"github.com/bfollek/advent2018go/cmd/advent2018go/util"
 )
 
 // Part1 sums the frequency changes.
@@ -41,7 +40,7 @@ func Part2(fileName string) (int, error) {
 }
 
 func loadFreqs(fileName string) ([]int, error) {
-	ss, err := loadData(fileName)
+	ss, err := util.LoadData(fileName)
 	if err != nil {
 		return nil, err
 	}
@@ -54,16 +53,4 @@ func loadFreqs(fileName string) ([]int, error) {
 		freqs = append(freqs, i)
 	}
 	return freqs, nil
-}
-
-func loadData(fileName string) ([]string, error) {
-	absPath, err := filepath.Abs(fileName)
-	if err != nil {
-		return nil, err
-	}
-	bytes, err := ioutil.ReadFile(absPath)
-	if err != nil {
-		return nil, err
-	}
-	return strings.Split(string(bytes), "\n"), nil
 }
