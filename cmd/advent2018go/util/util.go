@@ -2,6 +2,7 @@ package util
 
 import (
 	"io/ioutil"
+	"log"
 	"path/filepath"
 	"strings"
 )
@@ -17,4 +18,13 @@ func LoadData(fileName string) ([]string, error) {
 		return nil, err
 	}
 	return strings.Split(string(bytes), "\n"), nil
+}
+
+// MustLoadData stops program execution if LoadData() returns an error.
+func MustLoadData(fileName string) []string {
+	data, err := LoadData(fileName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return data
 }

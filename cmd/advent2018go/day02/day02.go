@@ -8,10 +8,7 @@ import (
 func Part1(fileName string) (int, error) {
 	cnt2 := 0
 	cnt3 := 0
-	ids, err := util.LoadData(fileName)
-	if err != nil {
-		return 0, err
-	}
+	ids := util.MustLoadData(fileName)
 	for _, id := range ids {
 		has2, has3 := checkID(id)
 		if has2 {

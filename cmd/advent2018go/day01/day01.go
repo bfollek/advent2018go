@@ -40,17 +40,14 @@ func Part2(fileName string) (int, error) {
 }
 
 func loadFreqs(fileName string) ([]int, error) {
-	ss, err := util.LoadData(fileName)
-	if err != nil {
-		return nil, err
-	}
+	ss := util.MustLoadData(fileName)
 	freqs := []int{}
 	for _, s := range ss {
-		var i int
-		if i, err = strconv.Atoi(s); err != nil {
+		if i, err := strconv.Atoi(s); err == nil {
+			freqs = append(freqs, i)
+		} else {
 			return nil, err
 		}
-		freqs = append(freqs, i)
 	}
 	return freqs, nil
 }
