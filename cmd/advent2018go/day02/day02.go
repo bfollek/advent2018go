@@ -27,7 +27,7 @@ func Part1(fileName string) (int, error) {
 // checkID checks IDs for letters that appear exactly 2 or 3 times.
 func checkID(id string) (bool, bool) {
 	runeMap := map[rune]int{}
-	for _, r := range []rune(id) {
+	for _, r := range id {
 		runeMap[r]++
 	}
 	var has2, has3 bool
