@@ -1,8 +1,6 @@
 package day01
 
 import (
-	"strconv"
-
 	"github.com/bfollek/advent2018go/cmd/advent2018go/util"
 )
 
@@ -43,11 +41,8 @@ func loadFreqs(fileName string) ([]int, error) {
 	ss := util.MustLoadData(fileName)
 	freqs := []int{}
 	for _, s := range ss {
-		if i, err := strconv.Atoi(s); err == nil {
-			freqs = append(freqs, i)
-		} else {
-			return nil, err
-		}
+		i := util.MustAtoi(s)
+		freqs = append(freqs, i)
 	}
 	return freqs, nil
 }

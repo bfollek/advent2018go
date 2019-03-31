@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -27,4 +28,14 @@ func MustLoadData(fileName string) []string {
 		log.Fatal(err)
 	}
 	return data
+}
+
+// MustAtoi converts a string to an integer and stops program execution
+// if there's an error.
+func MustAtoi(s string) int {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return i
 }
