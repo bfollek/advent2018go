@@ -5,7 +5,7 @@ import (
 )
 
 // Part1 does a checksum on the box IDs.
-func Part1(fileName string) (int, error) {
+func Part1(fileName string) int {
 	cnt2 := 0
 	cnt3 := 0
 	ids := util.MustLoadData(fileName)
@@ -18,7 +18,7 @@ func Part1(fileName string) (int, error) {
 			cnt3++
 		}
 	}
-	return cnt2 * cnt3, nil
+	return cnt2 * cnt3
 }
 
 // checkID checks IDs for letters that appear exactly 2 or 3 times.
