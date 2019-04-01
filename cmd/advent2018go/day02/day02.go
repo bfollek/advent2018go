@@ -83,5 +83,7 @@ func differByOne(s1, s2 string) (bool, string) {
 			commonChars.WriteRune(val)
 		}
 	}
+	// s1 and s2 aren't equal, so diffCnt can't be 0,
+	// and it's not > 1. So we've got the winners.
 	return true, commonChars.String()
 }
