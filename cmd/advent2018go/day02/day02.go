@@ -64,6 +64,9 @@ func Part2(fileName string) string {
 func differByOne(s1, s2 string) (bool, string) {
 	var commonChars bytes.Buffer
 	var diffCnt int
+	if s1 == s2 {
+		return false, ""
+	}
 	// Work with rune slices so the indexes are reliable.
 	r1 := []rune(s1)
 	r2 := []rune(s2)
@@ -80,8 +83,5 @@ func differByOne(s1, s2 string) (bool, string) {
 			commonChars.WriteRune(val)
 		}
 	}
-	if diffCnt == 1 {
-		return true, commonChars.String()
-	}
-	return false, ""
+	return true, commonChars.String()
 }
