@@ -48,8 +48,11 @@ func checkID(id string) (bool, bool) {
 // and returns their common chars.
 func Part2(fileName string) string {
 	ids := util.MustLoadData(fileName)
-	for _, id1 := range ids {
-		for _, id2 := range ids {
+	for i, id1 := range ids {
+		for j, id2 := range ids {
+			if i == j {
+				continue // Same string
+			}
 			if b, commonChars := differByOne(id1, id2); b {
 				return commonChars
 			}
@@ -64,9 +67,6 @@ func Part2(fileName string) string {
 func differByOne(s1, s2 string) (bool, string) {
 	var commonChars bytes.Buffer
 	var diffCnt int
-	if s1 == s2 {
-		return false, ""
-	}
 	// Work with rune slices so the indexes are reliable.
 	r1 := []rune(s1)
 	r2 := []rune(s2)
