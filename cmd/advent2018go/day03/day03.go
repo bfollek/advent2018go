@@ -7,11 +7,12 @@ import (
 )
 
 type claim struct {
-	id     string
-	left   int
-	top    int
-	width  int
-	height int
+	id       string
+	left     int
+	top      int
+	width    int
+	height   int
+	overlaps bool // Does this claim overlap any other claims?
 }
 
 type inch struct {
@@ -29,8 +30,7 @@ func init() {
 
 // Part1 counts how many square inches of fabric are within two or more claims.
 func Part1(fileName string) int {
-	data := util.MustLoadData(fileName)
-	claims := parseClaims(data)
+	claims := parseClaims(fileName)
 	m := mapClaims(claims)
 	cnt := 0
 	for _, values := range m {
@@ -41,7 +41,8 @@ func Part1(fileName string) int {
 	return cnt
 }
 
-func parseClaims(data []string) []*claim {
+func parseClaims(fileName string) []*claim {
+	data := util.MustLoadData(fileName)
 	claims := []*claim{}
 	for _, s := range data {
 		captures := reClaim.FindStringSubmatch(s)
@@ -65,4 +66,25 @@ func mapClaims(claims []*claim) map[inch][]*claim {
 		}
 	}
 	return m
+}
+
+// Part2 finds the one claim that doesn't overlap any other, and returns its ID.
+func Part2(fileName string) string {
+	claims := parseClaims(fileName)
+	m := mapClaims(claims)
+	for _, values := range m {
+		// If an inch has multiple claims, set all those claims to overlaps = true.
+		if len(values) > 1 {
+			for _, c := range values {
+				c.overlaps = true
+			}
+		}
+	}
+	// The claim that doesn't overlap is the winner.
+	for _, c := range claims {
+		if !c.overlaps {
+			return c.id
+		}
+	}
+	return ""
 }
