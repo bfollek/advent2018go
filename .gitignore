@@ -35,3 +35,4 @@ _testmain.go
 .DS_Store
 scratch*
 TODO
+.vscode
