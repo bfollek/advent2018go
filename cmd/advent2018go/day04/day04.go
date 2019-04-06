@@ -44,10 +44,10 @@ func Part1(fileName string) int {
 func Part2(fileName string) int {
 	idToMinutes := mapData(fileName)
 	// We need the index into minutes to build our result.
-	// We need the value at that index to find our result.
-	maxSoFarMinIndex := -1 // Index into minutes, i.e. 00..59
-	maxSoFarMinValue := -1 // Value at that index, i.e. minutes[maxSoFarMin]
-	maxSoFarID := ""
+	// We need the value at that index to find our result as we loop.
+	var maxSoFarMinIndex int // Index into minutes, i.e. 00..59
+	maxSoFarMinValue := -1   // Value at that index, i.e. minutes[maxSoFarMin]
+	var maxSoFarID string
 	for id, mins := range idToMinutes {
 		min := minuteMostAsleep(mins)
 		if mins[min] > maxSoFarMinValue {
@@ -91,7 +91,7 @@ func logNap(idToMinutes map[string]minutes, id string, fallsAsleep, wakesUp stri
 // Return the id of the guard who spends the most minutes asleep.
 func mostMinutesAsleep(idToMinutes map[string]minutes) string {
 	maxSoFar := -1
-	maxSoFarID := ""
+	var maxSoFarID string
 	for id, mins := range idToMinutes {
 		sum := 0
 		for _, n := range mins {
@@ -109,7 +109,7 @@ func mostMinutesAsleep(idToMinutes map[string]minutes) string {
 // This is the max value in the array.
 func minuteMostAsleep(mins minutes) int {
 	maxSoFar := -1
-	maxSoFarMin := -1
+	var maxSoFarMin int
 	for i, n := range mins {
 		if n > maxSoFar {
 			maxSoFar = n
