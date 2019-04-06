@@ -38,7 +38,7 @@ func Part2(fileName string) (int, error) {
 }
 
 func loadFreqs(fileName string) ([]int, error) {
-	ss := util.MustLoadData(fileName)
+	ss := util.MustLoadStringSlice(fileName)
 	freqs := []int{}
 	for _, s := range ss {
 		i := util.MustAtoi(s)

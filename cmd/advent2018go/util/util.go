@@ -8,26 +8,32 @@ import (
 	"strings"
 )
 
-// LoadData loads a text file into a slice of strings.
-func LoadData(fileName string) ([]string, error) {
+// LoadString loads a text file into a string.
+func LoadString(fileName string) (string, error) {
 	absPath, err := filepath.Abs(fileName)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	bytes, err := ioutil.ReadFile(absPath)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return strings.Split(string(bytes), "\n"), nil
+	return string(bytes), nil
 }
 
-// MustLoadData stops program execution if LoadData() returns an error.
-func MustLoadData(fileName string) []string {
-	data, err := LoadData(fileName)
+// MustLoadString stops program execution if LoadString() returns an error.
+func MustLoadString(fileName string) string {
+	s, err := LoadString(fileName)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return data
+	return s
+}
+
+// MustLoadStringSlice splits the result of MustLoadString() on newlines.
+func MustLoadStringSlice(fileName string) []string {
+	s := MustLoadString(fileName)
+	return strings.Split(s, "\n")
 }
 
 // MustAtoi converts a string to an integer and stops program execution

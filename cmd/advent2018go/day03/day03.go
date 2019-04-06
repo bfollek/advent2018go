@@ -42,7 +42,7 @@ func Part1(fileName string) int {
 }
 
 func parseClaims(fileName string) []*claim {
-	data := util.MustLoadData(fileName)
+	data := util.MustLoadStringSlice(fileName)
 	claims := []*claim{}
 	for _, s := range data {
 		captures := reClaim.FindStringSubmatch(s)

@@ -10,7 +10,7 @@ import (
 func Part1(fileName string) int {
 	cnt2 := 0
 	cnt3 := 0
-	ids := util.MustLoadData(fileName)
+	ids := util.MustLoadStringSlice(fileName)
 	for _, id := range ids {
 		has2, has3 := checkID(id)
 		if has2 {
@@ -47,7 +47,7 @@ func checkID(id string) (bool, bool) {
 // Part2 finds the two box IDs that differ by just one char,
 // and returns their common chars.
 func Part2(fileName string) string {
-	ids := util.MustLoadData(fileName)
+	ids := util.MustLoadStringSlice(fileName)
 	for i, id1 := range ids {
 		for j, id2 := range ids {
 			if i == j {

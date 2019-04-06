@@ -56,7 +56,7 @@ func Part2(fileName string) int {
 }
 
 func mapData(fileName string) map[string]minutes {
-	data := util.MustLoadData(fileName)
+	data := util.MustLoadStringSlice(fileName)
 	sort.Strings(data)
 	idToMinutes := map[string]minutes{}
 	var id, fallsAsleep, wakesUp string
