@@ -9,8 +9,7 @@ import (
 	"github.com/bfollek/advent2018go/cmd/advent2018go/util"
 )
 
-type tID string
-type tMinutes [60]int
+type minutes [60]int
 
 var reBeginsShift *regexp.Regexp
 var reFallsAsleep *regexp.Regexp
@@ -26,8 +25,8 @@ func init() {
 	*/
 
 	reBeginsShift = regexp.MustCompile(`(\d+) begins shift`)
-	reFallsAsleep = regexp.MustCompile(`:(\d\d) falls asleep`)
-	reWakesUp = regexp.MustCompile(`:(\d\d) wakes up`)
+	reFallsAsleep = regexp.MustCompile(`:(\d\d)] falls asleep`)
+	reWakesUp = regexp.MustCompile(`:(\d\d)] wakes up`)
 }
 
 // Part1 finds the guard that has the most minutes asleep,
@@ -40,17 +39,18 @@ func Part1(fileName string) int {
 	return 902
 }
 
-func mapData(fileName string) map[id]minutes {
+func mapData(fileName string) map[string]minutes {
 	data := util.MustLoadData(fileName)
 	sort.Strings(data)
-	m := map[tID]tMinutes{}
+	m := map[string]minutes{}
 	var id, fallsAsleep, wakesUp string
+	var captures []string
 	for _, s := range data {
-		if captures := reBeginsShift.FindStringSubmatch(s); captures != nil {
+		if captures = reBeginsShift.FindStringSubmatch(s); captures != nil {
 			id = captures[1]
-		} else if captures := reFallsAsleep.FindStringSubmatch(s); captures != nil {
+		} else if captures = reFallsAsleep.FindStringSubmatch(s); captures != nil {
 			fallsAsleep = captures[1]
-		} else if captures := reWakesUp.FindStringSubmatch(s); captures != nil {
+		} else if captures = reWakesUp.FindStringSubmatch(s); captures != nil {
 			wakesUp = captures[1]
 			logNap(m, id, fallsAsleep, wakesUp)
 		} else {
@@ -60,9 +60,10 @@ func mapData(fileName string) map[id]minutes {
 	return m
 }
 
-func logNap(m map[tID]tMinutes, id, fallsAsleep, wakesUp string) {
+func logNap(m map[string]minutes, id string, fallsAsleep, wakesUp string) {
 	for i := util.MustAtoi(fallsAsleep); i < util.MustAtoi(wakesUp); i++ {
-		tmp := m[tID(id)][i]
-		m[tID(id)][i] = tmp
+		mins := m[id]
+		mins[i]++
+		m[id] = mins
 	}
 }
