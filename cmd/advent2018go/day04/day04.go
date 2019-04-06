@@ -43,20 +43,16 @@ func Part1(fileName string) int {
 // and returns that minute multiplied by the guard's ID.
 func Part2(fileName string) int {
 	idToMinutes := mapData(fileName)
-	// We need the index into minutes to build our result.
-	// We need the value at that index to find our result as we loop.
-	var maxSoFarMinIndex int // Index into minutes, i.e. 00..59
-	maxSoFarMinValue := -1   // Value at that index, i.e. minutes[maxSoFarMin]
+	var maxSoFarMin int // 00..59
 	var maxSoFarID string
 	for id, mins := range idToMinutes {
 		min := minuteMostAsleep(mins)
-		if mins[min] > maxSoFarMinValue {
-			maxSoFarMinValue = mins[min]
-			maxSoFarMinIndex = min
+		if mins[min] > idToMinutes[maxSoFarID][maxSoFarMin] {
+			maxSoFarMin = min
 			maxSoFarID = id
 		}
 	}
-	return util.MustAtoi(maxSoFarID) * maxSoFarMinIndex
+	return util.MustAtoi(maxSoFarID) * maxSoFarMin
 }
 
 func mapData(fileName string) map[string]minutes {
