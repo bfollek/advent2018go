@@ -33,16 +33,36 @@ func init() {
 // and the minute they're asleep the most. Part1 returns
 // that minute multiplied by the guard's ID.
 func Part1(fileName string) int {
-	m := mapData(fileName)
-	id := mostMinutesAsleep(m)
-	min := minuteMostAsleep(m[id])
+	idToMinutes := mapData(fileName)
+	id := mostMinutesAsleep(idToMinutes)
+	min := minuteMostAsleep(idToMinutes[id])
 	return util.MustAtoi(id) * min
+}
+
+// Part2 finds the guard who is most frequently asleep on the same minute,
+// and returns that minute multiplied by the guard's ID.
+func Part2(fileName string) int {
+	idToMinutes := mapData(fileName)
+	// We need the index into minutes to build our result.
+	// We need the value at that index to find our result.
+	maxSoFarMinIndex := -1 // Index into minutes, i.e. 00..59
+	maxSoFarMinValue := -1 // Value at that index, i.e. minutes[maxSoFarMin]
+	maxSoFarID := ""
+	for id, mins := range idToMinutes {
+		min := minuteMostAsleep(mins)
+		if mins[min] > maxSoFarMinValue {
+			maxSoFarMinValue = mins[min]
+			maxSoFarMinIndex = min
+			maxSoFarID = id
+		}
+	}
+	return util.MustAtoi(maxSoFarID) * maxSoFarMinIndex
 }
 
 func mapData(fileName string) map[string]minutes {
 	data := util.MustLoadData(fileName)
 	sort.Strings(data)
-	m := map[string]minutes{}
+	idToMinutes := map[string]minutes{}
 	var id, fallsAsleep, wakesUp string
 	var captures []string
 	for _, s := range data {
@@ -52,27 +72,27 @@ func mapData(fileName string) map[string]minutes {
 			fallsAsleep = captures[1]
 		} else if captures = reWakesUp.FindStringSubmatch(s); captures != nil {
 			wakesUp = captures[1]
-			logNap(m, id, fallsAsleep, wakesUp)
+			logNap(idToMinutes, id, fallsAsleep, wakesUp)
 		} else {
 			log.Fatal(fmt.Errorf("Unexpected data line: %s", s))
 		}
 	}
-	return m
+	return idToMinutes
 }
 
-func logNap(m map[string]minutes, id string, fallsAsleep, wakesUp string) {
+func logNap(idToMinutes map[string]minutes, id string, fallsAsleep, wakesUp string) {
 	for i := util.MustAtoi(fallsAsleep); i < util.MustAtoi(wakesUp); i++ {
-		mins := m[id]
+		mins := idToMinutes[id]
 		mins[i]++
-		m[id] = mins
+		idToMinutes[id] = mins
 	}
 }
 
 // Return the id of the guard who spends the most minutes asleep.
-func mostMinutesAsleep(m map[string]minutes) string {
+func mostMinutesAsleep(idToMinutes map[string]minutes) string {
 	maxSoFar := -1
 	maxSoFarID := ""
-	for id, mins := range m {
+	for id, mins := range idToMinutes {
 		sum := 0
 		for _, n := range mins {
 			sum += n
@@ -86,6 +106,7 @@ func mostMinutesAsleep(m map[string]minutes) string {
 }
 
 // Given a minutes type, return the minute where the guard was most asleep.
+// This is the max value in the array.
 func minuteMostAsleep(mins minutes) int {
 	maxSoFar := -1
 	maxSoFarMin := -1
