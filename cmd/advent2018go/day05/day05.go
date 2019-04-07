@@ -37,23 +37,20 @@ func Part2(fileName string) int {
 }
 
 func runReaction(polymer string) string {
-	units := []rune(polymer)
 	reacted := []rune{}
-	for i := 0; i < len(units); i++ {
-		nextUnit := units[i]
-		// Special case when reacted is empty. This can come up more than once,
-		// because we sometimes delete from reacted.
-		if len(reacted) == 0 {
-			reacted = append(reacted, nextUnit)
-			continue
+	for _, nextUnit := range polymer {
+		if len(reacted) > 0 {
+			lastIndex := len(reacted) - 1
+			lastUnit := reacted[lastIndex]
+			if react(nextUnit, lastUnit) {
+				reacted = reacted[:lastIndex] // Delete last unit from reacted
+				continue
+			}
 		}
-		lastIndex := len(reacted) - 1
-		lastUnit := reacted[lastIndex]
-		if react(nextUnit, lastUnit) {
-			reacted = reacted[:lastIndex] // Delete last unit from reacted
-		} else {
-			reacted = append(reacted, nextUnit) // Add next unit to reacted
-		}
+		// If we get here, either there was no reaction or reacted is empty.
+		// (reacted can be empty more than once because we delete from it.)
+		// In either case, add next unit to reacted.
+		reacted = append(reacted, nextUnit)
 	}
 	return string(reacted)
 }

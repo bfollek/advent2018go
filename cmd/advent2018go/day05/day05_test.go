@@ -20,6 +20,10 @@ func TestRunReaction(t *testing.T) {
 			"",
 			"",
 		},
+		{
+			"dDcCBbaAXy",
+			"Xy",
+		},
 	}
 	for _, rt := range reactionTests {
 		if result := runReaction(rt.input); result != rt.expected {
