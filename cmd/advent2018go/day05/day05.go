@@ -1,6 +1,7 @@
 package day05
 
 import (
+	"bytes"
 	"unicode"
 
 	"github.com/bfollek/advent2018go/cmd/advent2018go/util"
@@ -13,32 +14,62 @@ func Part1(fileName string) int {
 	return len(reacted)
 }
 
-// Part2 returns the length of the improved polymer.
+// Part2 returns the length of the most improved polymer.
 func Part2(fileName string) int {
-	_ = fileName
-	return 2
+	results := map[rune]int{}
+	polymer := util.MustLoadString(fileName)
+	for _, unit := range polymer {
+		unit = unicode.ToLower(unit)
+		if _, ok := results[unit]; ok { // Already tried this unit
+			continue
+		}
+		improved := removeUnit(polymer, unit)
+		reacted := runReaction(improved)
+		results[unit] = len(reacted)
+	}
+	minSoFar := len(polymer) + 1
+	for _, n := range results {
+		if n < minSoFar {
+			minSoFar = n
+		}
+	}
+	return minSoFar
 }
 
 func runReaction(polymer string) string {
-	if polymer == "" {
-		return "" // Guard against edge case
-	}
 	units := []rune(polymer)
-	rv := []rune{units[0]}
-	for i := 1; i < len(units); i++ {
+	reacted := []rune{}
+	for i := 0; i < len(units); i++ {
 		nextUnit := units[i]
-		lastIndex := len(rv) - 1
-		lastUnit := rv[lastIndex]
+		// Special case when reacted is empty. This can come up more than once,
+		// because we sometimes delete from reacted.
+		if len(reacted) == 0 {
+			reacted = append(reacted, nextUnit)
+			continue
+		}
+		lastIndex := len(reacted) - 1
+		lastUnit := reacted[lastIndex]
 		if react(nextUnit, lastUnit) {
-			rv = rv[:lastIndex] // Drop last unit from rv
+			reacted = reacted[:lastIndex] // Delete last unit from reacted
 		} else {
-			rv = append(rv, nextUnit) // Add next unit to rv
+			reacted = append(reacted, nextUnit) // Add next unit to reacted
 		}
 	}
-	return string(rv)
+	return string(reacted)
 }
 
 func react(unit1, unit2 rune) bool {
 	// Same char, different cases, e.g. a, A
 	return (unit1 != unit2) && (unicode.ToUpper(unit1) == unicode.ToUpper(unit2))
+}
+
+func removeUnit(polymer string, unit rune) string {
+	var buf bytes.Buffer
+	for _, r := range polymer {
+		if unit == unicode.ToLower(r) {
+			continue
+		}
+		buf.WriteRune(r)
+	}
+	return buf.String()
 }
